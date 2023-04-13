@@ -76,3 +76,22 @@ Nous utiliserons la commande "contrab -e" pour modifier le fichier contrab. Puis
 
 00 10 * * * root sh
 Le script exécutera tous les jours à 10 heures du matin.
+
+Intégrer des options de réimplantation :
+
+Lors de la réimplantation d'une base de données qui existe toujours, mais qui est corrompue ( par exemple), 
+nous pourrons avoir besoin d'options présentes dans le fichier .sql backupé qui permettront de faciliter cette 
+réimplantation. Il s'agit des commandes comme "DROP DATABASE IF EXISTS" qui efface la base de données voulue 
+avant de la réimplanter, de "CREATE DATABASE " qui la recrée et de "USE nom_bdd" qui permet de préciser sur 
+quelle base de données vont agirent les commandes SQL qui vont suivre.
+
+Par défaut, ces commandes ne sont pas ajoutées dans le fichier ".sql" qui est sauvegardé. Nous devons alors 
+ajouter des options lors du passage de la commande mysqldump. La commande deviendra donc celle-là :
+
+mysqldump --default-extra-file=/etc/mysql/user.cnf --single-transaction --add-drop-dabatase --databases $BDD > "$CHEMIN/$BDD"_"$DATE.sql"
+
+On ajoute donc les options "--database" qui ajoute le "CREATE DATABASE" et "USE nom_bdd" et "--add-drop-databases" 
+qui ajoute le "DROP DATABASE IF EXISTS" dans le passage de la commande "mysqldump".
+
+END :)
+Enjoy
