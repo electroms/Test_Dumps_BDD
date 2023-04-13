@@ -17,6 +17,7 @@ il serait donc dangereux de les lancer avec un utilisateur ayant des droits de m
 de création ou de suppression sur les bases de données.On se connecte au serveur de base de données :
 
 mysql -u root -p
+
 On crée l'utilisateur 'backup'@'localhost'. Il est important de préciser que backup n'agira uniquement que 
 depuis le serveur local (depuis le script qui sera situé sur le serveur).
 
@@ -32,13 +33,15 @@ Le script de sauvegarde
 Si on dispose de plusieurs bases de données, il est intéressant de faire un script qui automatisera le listage, la lecture et la sauvegarde de chaque base de données.Il nous faut tout d'abord créer un répertoire temporaire afin de stocker les données :
 
 mkdir /home/user/save_BD
-Pour sauvegarder la base de données, nous utiliserons mysqldump. C'est un utilitaire qui permet d'exporter une base ou un groupe de bases vers un fichier texte, pour la sauvegarde ou le transfert entre deux serveurs (pas nécessairement entre serveurs MySQL).
+Pour sauvegarder la base de données, nous utiliserons mysqldump. C'est un utilitaire qui permet d'exporter 
+une base ou un groupe de bases vers un fichier texte, pour la sauvegarde ou le transfert entre deux serveurs 
+(pas nécessairement entre serveurs MySQL).
 
 L'export contiendra les requêtes SQL nécessaires pour créer la table et la remplir.
 
 Puis on crée le script qui automatisera la sauvegarde.
 
-vim backup_script.sh
+vim backup_script.sh (confère script du repository)
 
 Explication des paramètres:
 
@@ -54,11 +57,12 @@ Cette option ajoute la commande SQL BEGIN avant d'exporter les données vers le 
 C'est généralement pratique pour les tables InnoDB et le niveau d'isolation de transaction READ_COMMITTED, 
 car ce mode va exporter l'état de la base au moment de la commande BEGIN sans bloquer les autres applications. 
 
-Il faut pour utiliser cette option que l'utilisateur ait les droit "LOCK TABLES"
---password : C'est le mot de passe de l'utilisateur en question
+Il faut pour utiliser cette option que l'utilisateur ait les droit "LOCK TABLES"--password : 
+C'est le mot de passe de l'utilisateur en question
 $BDD : nom de la base de données, ce nom est une variable qui change en fonction de la lecture
-$LISTEDBB> "$CHEMIN/$BDD"_"$DATE.sql": on stocke ensuite la base de données dans un fichier portant 
-son nom avec l'extension ".sql"
+
+$LISTEDBB> "$CHEMIN/$BDD"_"$DATE.sql": 
+on stocke ensuite la base de données dans un fichier portant son nom avec l'extension ".sql"
 
 Il faut donner la possibilité à ce script d'être exécuté :
 
@@ -66,9 +70,9 @@ chmod +x backup_script.sh
 
 L'automatisation de la tâche
 Nous pouvons utiliser le service cron pour le lancement automatique du script de sauvegarde à un intervalle 
-régulier. Par exemple, si nous souhaitons que le script s'exécute toutes les nuits à 4 heures du matin. 
+régulier. Par exemple, si nous souhaitons que le script s'exécute toutes les jours à 10 heures du matin. 
 
 Nous utiliserons la commande "contrab -e" pour modifier le fichier contrab. Puis nous y ajouterons cette ligne:
 
-00 4 * * * root sh
-Le script exécutera tous les jours à 4 heures du matin.
+00 10 * * * root sh
+Le script exécutera tous les jours à 10 heures du matin.
