@@ -1,6 +1,6 @@
 #!/bin/bash
 # On liste nos bases de données
-LISTEBDD=$( echo 'show databases' | mysql -u backup --password=< xWF8ux3g >)
+LISTEBDD=$( echo 'show databases' | mysql -u backup --password=< superMotDePasse >)
 for BDD in $LISTEBDD do
 # Exclusion des BDD information_schema , mysql et Database
 if [[ $BDD != "information_schema" ]] && [[ $BDD != "mysql" ]] && [[ $BDD != "Database" ]]; then
